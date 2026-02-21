@@ -28,6 +28,11 @@
       font-size: 16px;
       box-sizing: border-box;
     }
+    .hint {
+      color:#666;
+      font-size: 13px;
+      margin-top: 6px;
+    }
     .row {
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -42,11 +47,6 @@
     .period-title {
       font-weight: 700;
       margin-bottom: 8px;
-    }
-    .hint {
-      color:#666;
-      font-size: 13px;
-      margin-top: 6px;
     }
     .hidden { display:none; }
     button {
@@ -67,11 +67,13 @@
     <div class="row">
       <div>
         <label for="studentId">학번</label>
-        <input id="studentId" name="studentId" inputmode="numeric" placeholder="예: 1234" required />
+        <!-- (추가) maxlength=4 -->
+        <input id="studentId" name="studentId" inputmode="numeric" placeholder="예: 2101" required maxlength="4" />
       </div>
       <div>
         <label for="name">이름</label>
-        <input id="name" name="name" placeholder="이름" required />
+        <!-- (추가) maxlength=3 -->
+        <input id="name" name="name" placeholder="이름" required maxlength="3" />
       </div>
     </div>
 
@@ -210,7 +212,6 @@
 
     const form = document.getElementById("form");
     const submitBtn = document.getElementById("submitBtn");
-
     const periods = [8, 9, 10, 11];
 
     function normalize(s) {
@@ -241,15 +242,23 @@
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const studentId = normalize(document.getElementById("studentId").value);
-      const name = normalize(document.getElementById("name").value);
-
-      if (!studentId || !name) {
-        alert("학번, 이름을 모두 입력하세요.");
+      // (변경) 제출 시점에만 숫자만 남기고 4자리 검사
+      const rawId = document.getElementById("studentId").value;
+      const studentId = rawId.replace(/\D+/g, "").trim();
+      if (!/^\d{4}$/.test(studentId)) {
+        alert("학번은 숫자 4자리여야 합니다.");
         return;
       }
 
-      // 8~11교시 검증 + payload 구성
+      // (변경) 제출 시점에만 공백 제거 + 정확히 3글자 검증
+      const rawName = document.getElementById("name").value;
+      const name = rawName.replace(/\s+/g, "").trim();
+      if (name.length !== 3) {
+        alert("이름은 공백 제외 정확히 세 글자여야 합니다.");
+        return;
+      }
+
+      // 8~11교시 검증 + payload 구성 (장소 또는 장소(사유))
       const payload = {
         studentId,
         name,
@@ -270,8 +279,7 @@
           return;
         }
 
-        payload[`place${p}`] = place;
-        payload[`reason${p}`] = NEED_REASON.has(place) ? reason : "";
+        payload[`p${p}`] = NEED_REASON.has(place) ? `${place}(${reason})` : place;
       }
 
       submitBtn.disabled = true;
