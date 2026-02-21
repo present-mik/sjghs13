@@ -29,11 +29,11 @@
     <div class="row">
       <div>
         <label for="studentId">학번</label>
-        <input id="studentId" name="studentId" inputmode="numeric" placeholder="예: 2101" required />
+        <input id="studentId" inputmode="numeric" placeholder="예: 2101" required />
       </div>
       <div>
         <label for="name">이름</label>
-        <input id="name" name="name" placeholder="이름" required />
+        <input id="name" placeholder="이름" required />
       </div>
     </div>
 
@@ -44,8 +44,8 @@
   </form>
 
   <script>
-    // TODO: 여기에 Apps Script 웹앱 URL(/exec)을 넣으세요.
-    const ENDPOINT_URL = "PASTE_YOUR_APPS_SCRIPT_WEBAPP_URL_HERE";
+    // 여기에 Apps Script 웹앱 URL(/exec)을 넣으세요.
+    const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbxp_NGgSOg7zw7_Mc1R-H32lZiBtFn2wo0Z6nmDfHy1rGJ7gSGQrqI4MhNNVXy3I-DS/exec";
 
     const PLACES = [
       "교실",
@@ -95,7 +95,6 @@
     function buildPlaceSelect(period) {
       const select = document.createElement("select");
       select.id = `p${period}`;
-      select.name = `p${period}`;
       select.required = true;
 
       const opt0 = document.createElement("option");
@@ -123,7 +122,6 @@
 
       const input = document.createElement("input");
       input.id = `r${period}`;
-      input.name = `r${period}`;
       input.placeholder = "예: 방과후, 2층 교무실(상담)";
 
       const hint = document.createElement("div");
@@ -147,7 +145,7 @@
       if (!need) input.value = "";
     }
 
-    // 교시별 입력 UI 생성
+    // 교시별 UI 생성
     for (const period of PERIODS) {
       const card = document.createElement("div");
       card.className = "card";
@@ -185,10 +183,8 @@
         return;
       }
 
-      // payload 구성
-      const payload = { studentId, name, userAgent: navigator.userAgent, page: location.href };
+      const payload = { studentId, name };
 
-      // 검증 + 데이터 채우기
       for (const period of PERIODS) {
         const place = norm(document.getElementById(`p${period}`).value);
         const reason = norm(document.getElementById(`r${period}`).value);
@@ -203,14 +199,12 @@
         }
 
         payload[`p${period}`] = place;
-        payload[`r${period}`] = reason; // 필요 없으면 빈 문자열
+        payload[`r${period}`] = reason; // 없으면 빈 문자열
       }
 
       submitBtn.disabled = true;
-
       try {
-        // Apps Script CORS 단순화를 위해 no-cors
-        await fetch(ENDPOINT_URL, {
+        await fetch(https://script.google.com/macros/s/AKfycbxp_NGgSOg7zw7_Mc1R-H32lZiBtFn2wo0Z6nmDfHy1rGJ7gSGQrqI4MhNNVXy3I-DS/exec, {
           method: "POST",
           mode: "no-cors",
           headers: { "Content-Type": "application/json" },
@@ -219,7 +213,6 @@
 
         setStatus("제출 완료", true);
         form.reset();
-        // 사유칸 숨김 초기화
         for (const period of PERIODS) toggleReason(period);
       } catch (err) {
         setStatus("전송 실패: 네트워크 상태를 확인하세요.", false);
@@ -228,7 +221,7 @@
       }
     });
 
-    // 초기 상태 사유칸 숨김
+    // 초기 상태
     for (const period of PERIODS) toggleReason(period);
   </script>
 </body>
