@@ -67,13 +67,11 @@
     <div class="row">
       <div>
         <label for="studentId">학번</label>
-        <!-- (추가) maxlength=4 -->
-        <input id="studentId" name="studentId" inputmode="numeric" placeholder="예: 2101" required maxlength="4" />
+        <input id="studentId" name="studentId" inputmode="numeric" placeholder="예: 2101" required />
       </div>
       <div>
         <label for="name">이름</label>
-        <!-- (추가) maxlength=3 -->
-        <input id="name" name="name" placeholder="이름" required maxlength="3" />
+        <input id="name" name="name" placeholder="이름" required />
       </div>
     </div>
 
@@ -201,8 +199,8 @@
   </form>
 
   <script>
-    // ⭐ Apps Script Web App URL 입력
-    const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbzAKfdNXQiBrV9VHcJAzlLJUOtxawmp15jQ6gLBeoa_OLRbNamQdOLzMTBgu0Uz9Wzj/exec";
+    // ⭐ Apps Script Web App URL 입력 (/exec)
+    const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbyszd-MeH9WMA8UXy7-QHkHVOoONxA_lgBGalB_PyqC6obS4DV5GkvAbWu-FugdwCAc/exec";
 
     // 사유 입력이 필요한 장소들
     const NEED_REASON = new Set([
@@ -232,7 +230,6 @@
       if (!need) reasonEl.value = "";
     }
 
-    // 초기화 + change 이벤트 연결
     for (const p of periods) {
       const placeEl = document.getElementById(`place${p}`);
       placeEl.addEventListener("change", () => toggleReasonForPeriod(p));
@@ -242,7 +239,7 @@
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      // (변경) 제출 시점에만 숫자만 남기고 4자리 검사
+      // 제출 시점에만 검증: 학번=숫자4자리, 이름=공백제거 후 3글자
       const rawId = document.getElementById("studentId").value;
       const studentId = rawId.replace(/\D+/g, "").trim();
       if (!/^\d{4}$/.test(studentId)) {
@@ -250,7 +247,6 @@
         return;
       }
 
-      // (변경) 제출 시점에만 공백 제거 + 정확히 3글자 검증
       const rawName = document.getElementById("name").value;
       const name = rawName.replace(/\s+/g, "").trim();
       if (name.length !== 3) {
@@ -258,13 +254,8 @@
         return;
       }
 
-      // 8~11교시 검증 + payload 구성 (장소 또는 장소(사유))
-      const payload = {
-        studentId,
-        name,
-        userAgent: navigator.userAgent,
-        page: location.href
-      };
+      // p8~p11 = "장소" 또는 "장소(사유)"
+      const payload = { studentId, name };
 
       for (const p of periods) {
         const place = normalize(document.getElementById(`place${p}`).value);
@@ -278,24 +269,22 @@
           alert(`${p}교시는 해당 장소 선택 시 사유를 입력해야 합니다.`);
           return;
         }
-
         payload[`p${p}`] = NEED_REASON.has(place) ? `${place}(${reason})` : place;
       }
 
-      submitBtn.disabled = true;
+      // ⭐ 초창기판 스타일: form 전송 방식(가장 안정적)
+      const body = new URLSearchParams(payload);
 
+      submitBtn.disabled = true;
       try {
         await fetch(ENDPOINT_URL, {
           method: "POST",
           mode: "no-cors",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
+          body
         });
-
         alert("제출 완료");
         form.reset();
         for (const p of periods) toggleReasonForPeriod(p);
-
       } catch (err) {
         alert("전송 실패: 네트워크 상태를 확인하세요.");
       } finally {
