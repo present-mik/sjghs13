@@ -3,244 +3,188 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>자습 장소 입력</title>
+  <title>2학년 자습 장소 선택</title>
+
   <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; max-width: 760px; margin: 24px auto; padding: 0 16px; }
-    h1 { font-size: 20px; margin: 0 0 16px; }
-    label { display:block; margin: 14px 0 6px; font-weight: 700; }
-    input, select, button { width: 100%; padding: 10px 12px; font-size: 16px; box-sizing: border-box; }
-    .row { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .hint { color:#666; font-size: 13px; margin-top: 6px; }
-    .reasonWrap { display:none; margin-top: 10px; }
-    .status { margin-top: 14px; padding: 10px 12px; border-radius: 8px; display:none; }
-    .ok { background:#eef8ee; }
-    .err { background:#fdeeee; }
-    button { margin-top: 18px; cursor: pointer; }
-    button[disabled] { opacity: 0.6; cursor: not-allowed; }
-    .card { border: 1px solid #e6e6e6; border-radius: 12px; padding: 14px; margin-top: 14px; }
-    .cardTitle { font-weight: 800; margin: 0 0 10px; }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      max-width: 720px;
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+
+    h1 {
+      font-size: 22px;
+      margin: 0 0 20px;
+      text-align: center;   /* 가운데 정렬 */
+    }
+
+    label {
+      display:block;
+      margin: 14px 0 6px;
+      font-weight: 600;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 16px;
+    }
+
+    .hint {
+      color:#666;
+      font-size: 13px;
+      margin-top: 6px;
+    }
+
+    .row {
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .hidden { display:none; }
+
+    button {
+      margin-top: 20px;
+      cursor: pointer;
+    }
+
+    button[disabled] {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 
 <body>
-  <h1>자습 장소 입력</h1>
+
+  <h1>2학년 자습 장소 선택</h1>
 
   <form id="form">
     <div class="row">
       <div>
         <label for="studentId">학번</label>
-        <input id="studentId" inputmode="numeric" placeholder="예: 2101" required />
+        <input id="studentId" name="studentId" inputmode="numeric"
+               placeholder="예: 1234" required />
       </div>
+
       <div>
         <label for="name">이름</label>
-        <input id="name" placeholder="이름" required />
+        <input id="name" name="name"
+               placeholder="이름" required />
       </div>
     </div>
 
-    <!-- 8교시 -->
-    <div class="card">
-      <div class="cardTitle">8교시</div>
-      <label for="p8">8교시 자습 장소</label>
-      <select id="p8" required>
-        <option value="">선택하세요</option>
-        <option>교실</option>
-        <option>아고라(교무실 옆)</option>
-        <option>아고라(3,4반 사이)</option>
-        <option>모둠학습실</option>
-        <option>시청각실</option>
-        <option>한우리관(강당)</option>
-        <option>어학실</option>
-        <option>과학실</option>
-        <option>무한상상실</option>
-        <option>강의실1</option>
-        <option>지성의 계단</option>
-        <option>외출</option>
-        <option>외박</option>
-        <option>기타</option>
-      </select>
-      <div id="reasonWrap8" class="reasonWrap">
-        <label for="r8">8교시 사유</label>
-        <input id="r8" placeholder="예: 방과후, 2층 교무실(상담)" />
-        <div class="hint">해당 장소 선택 시 사유 입력이 필요합니다.</div>
-      </div>
-    </div>
+    <label for="place">자습 장소</label>
+    <select id="place" name="place" required>
+      <option value="">선택하세요</option>
+      <option>교실</option>
+      <option>아고라(교무실 옆)</option>
+      <option>아고라(3,4반 사이)</option>
+      <option>모둠학습실</option>
+      <option>시청각실</option>
+      <option>한우리관(강당)</option>
+      <option>어학실</option>
+      <option>과학실</option>
+      <option>무한상상실</option>
+      <option>강의실1</option>
+      <option>지성의 계단</option>
+      <option>외출</option>
+      <option>외박</option>
+      <option>기타</option>
+    </select>
 
-    <!-- 9교시 -->
-    <div class="card">
-      <div class="cardTitle">9교시</div>
-      <label for="p9">9교시 자습 장소</label>
-      <select id="p9" required>
-        <option value="">선택하세요</option>
-        <option>교실</option>
-        <option>아고라(교무실 옆)</option>
-        <option>아고라(3,4반 사이)</option>
-        <option>모둠학습실</option>
-        <option>시청각실</option>
-        <option>한우리관(강당)</option>
-        <option>어학실</option>
-        <option>과학실</option>
-        <option>무한상상실</option>
-        <option>강의실1</option>
-        <option>지성의 계단</option>
-        <option>외출</option>
-        <option>외박</option>
-        <option>기타</option>
-      </select>
-      <div id="reasonWrap9" class="reasonWrap">
-        <label for="r9">9교시 사유</label>
-        <input id="r9" placeholder="예: 방과후, 2층 교무실(상담)" />
-        <div class="hint">해당 장소 선택 시 사유 입력이 필요합니다.</div>
-      </div>
-    </div>
-
-    <!-- 10교시 -->
-    <div class="card">
-      <div class="cardTitle">10교시</div>
-      <label for="p10">10교시 자습 장소</label>
-      <select id="p10" required>
-        <option value="">선택하세요</option>
-        <option>교실</option>
-        <option>아고라(교무실 옆)</option>
-        <option>아고라(3,4반 사이)</option>
-        <option>모둠학습실</option>
-        <option>시청각실</option>
-        <option>한우리관(강당)</option>
-        <option>어학실</option>
-        <option>과학실</option>
-        <option>무한상상실</option>
-        <option>강의실1</option>
-        <option>지성의 계단</option>
-        <option>외출</option>
-        <option>외박</option>
-        <option>기타</option>
-      </select>
-      <div id="reasonWrap10" class="reasonWrap">
-        <label for="r10">10교시 사유</label>
-        <input id="r10" placeholder="예: 방과후, 2층 교무실(상담)" />
-        <div class="hint">해당 장소 선택 시 사유 입력이 필요합니다.</div>
-      </div>
-    </div>
-
-    <!-- 11교시 -->
-    <div class="card">
-      <div class="cardTitle">11교시</div>
-      <label for="p11">11교시 자습 장소</label>
-      <select id="p11" required>
-        <option value="">선택하세요</option>
-        <option>교실</option>
-        <option>아고라(교무실 옆)</option>
-        <option>아고라(3,4반 사이)</option>
-        <option>모둠학습실</option>
-        <option>시청각실</option>
-        <option>한우리관(강당)</option>
-        <option>어학실</option>
-        <option>과학실</option>
-        <option>무한상상실</option>
-        <option>강의실1</option>
-        <option>지성의 계단</option>
-        <option>외출</option>
-        <option>외박</option>
-        <option>기타</option>
-      </select>
-      <div id="reasonWrap11" class="reasonWrap">
-        <label for="r11">11교시 사유</label>
-        <input id="r11" placeholder="예: 방과후, 2층 교무실(상담)" />
-        <div class="hint">해당 장소 선택 시 사유 입력이 필요합니다.</div>
+    <div id="reasonWrap" class="hidden">
+      <label for="reason">사유</label>
+      <input id="reason" name="reason"
+             placeholder="예: 방과후, 2층 교무실(상담)" />
+      <div class="hint">
+        해당 장소 선택 시 사유 입력이 필요합니다.
       </div>
     </div>
 
     <button id="submitBtn" type="submit">제출</button>
-    <div id="status" class="status"></div>
   </form>
 
   <script>
-    // /exec 로 끝나는 Apps Script 웹앱 URL을 넣으세요.
+    // ⭐ 여기 반드시 Apps Script Web App URL 입력
     const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbyPVnQqn9kavbz7DFLjl0C9LFdVQ1OzOHq0VgjZ5cEwyCCP7CY6OI6bPE7lxj91HgsG/exec";
 
     const NEED_REASON = new Set([
-      "모둠학습실","시청각실","한우리관(강당)","어학실","과학실",
-      "무한상상실","강의실1","지성의 계단","기타"
+      "모둠학습실", "시청각실", "한우리관(강당)", "어학실", "과학실",
+      "무한상상실", "강의실1", "지성의 계단", "기타"
     ]);
 
-    const PERIODS = [8,9,10,11];
-
     const form = document.getElementById("form");
-    const statusEl = document.getElementById("status");
+    const placeEl = document.getElementById("place");
+    const reasonWrap = document.getElementById("reasonWrap");
+    const reasonEl = document.getElementById("reason");
     const submitBtn = document.getElementById("submitBtn");
 
-    const norm = (s) => (s || "").replace(/\s+/g, " ").trim();
-
-    function setStatus(msg, ok) {
-      statusEl.textContent = msg;
-      statusEl.className = "status " + (ok ? "ok" : "err");
-      statusEl.style.display = "block";
+    function normalize(s) {
+      return (s || "").replace(/\s+/g, " ").trim();
     }
 
-    function toggleReason(period) {
-      const place = norm(document.getElementById(`p${period}`).value);
-      const wrap = document.getElementById(`reasonWrap${period}`);
-      const input = document.getElementById(`r${period}`);
-
+    function toggleReason() {
+      const place = normalize(placeEl.value);
       const need = NEED_REASON.has(place);
-      wrap.style.display = need ? "block" : "none";
-      input.required = need;
-      if (!need) input.value = "";
+      reasonWrap.classList.toggle("hidden", !need);
+      reasonEl.required = need;
+      if (!need) reasonEl.value = "";
     }
 
-    // change 이벤트 연결 + 초기 상태
-    PERIODS.forEach(p => {
-      document.getElementById(`p${p}`).addEventListener("change", () => toggleReason(p));
-      toggleReason(p);
-    });
+    placeEl.addEventListener("change", toggleReason);
+    toggleReason();
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      statusEl.style.display = "none";
 
-      const studentId = norm(document.getElementById("studentId").value);
-      const name = norm(document.getElementById("name").value);
+      const studentId = normalize(document.getElementById("studentId").value);
+      const name = normalize(document.getElementById("name").value);
+      const place = normalize(placeEl.value);
+      const reason = normalize(reasonEl.value);
 
-      if (!studentId || !name) {
-        setStatus("학번과 이름을 입력하세요.", false);
+      if (!studentId || !name || !place) {
+        alert("학번, 이름, 자습 장소를 모두 입력하세요.");
         return;
       }
 
-      const payload = { studentId, name };
-
-      for (const p of PERIODS) {
-        const place = norm(document.getElementById(`p${p}`).value);
-        const reason = norm(document.getElementById(`r${p}`).value);
-
-        if (!place) {
-          setStatus(`${p}교시 장소를 선택하세요.`, false);
-          return;
-        }
-        if (NEED_REASON.has(place) && !reason) {
-          setStatus(`${p}교시: 사유를 입력해야 합니다.`, false);
-          return;
-        }
-        payload[`p${p}`] = place;
-        payload[`r${p}`] = reason;
+      if (NEED_REASON.has(place) && !reason) {
+        alert("해당 장소 선택 시 사유를 입력해야 합니다.");
+        return;
       }
 
       submitBtn.disabled = true;
+
+      const payload = {
+        studentId,
+        name,
+        place,
+        reason: NEED_REASON.has(place) ? reason : "",
+        userAgent: navigator.userAgent,
+        page: location.href
+      };
+
       try {
         await fetch(ENDPOINT_URL, {
           method: "POST",
           mode: "no-cors",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
+          body: JSON.stringify(payload)
         });
 
-        setStatus("제출 완료", true);
+        alert("제출 완료");   // ✅ 팝업 표시
         form.reset();
-        PERIODS.forEach(toggleReason);
+        toggleReason();
+
       } catch (err) {
-        setStatus("전송 실패: 네트워크 상태를 확인하세요.", false);
+        alert("전송 실패: 네트워크 상태를 확인하세요.");
       } finally {
         submitBtn.disabled = false;
       }
     });
   </script>
+
 </body>
 </html>
