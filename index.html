@@ -37,48 +37,133 @@
       </div>
     </div>
 
-    <div id="periods"></div>
+    <!-- 8교시 -->
+    <div class="card">
+      <div class="cardTitle">8교시</div>
+      <label for="p8">8교시 자습 장소</label>
+      <select id="p8" required>
+        <option value="">선택하세요</option>
+        <option>교실</option>
+        <option>아고라(교무실 옆)</option>
+        <option>아고라(3,4반 사이)</option>
+        <option>모둠학습실</option>
+        <option>시청각실</option>
+        <option>한우리관(강당)</option>
+        <option>어학실</option>
+        <option>과학실</option>
+        <option>무한상상실</option>
+        <option>강의실1</option>
+        <option>지성의 계단</option>
+        <option>외출</option>
+        <option>외박</option>
+        <option>기타</option>
+      </select>
+      <div id="reasonWrap8" class="reasonWrap">
+        <label for="r8">8교시 사유</label>
+        <input id="r8" placeholder="예: 방과후, 2층 교무실(상담)" />
+        <div class="hint">해당 장소 선택 시 사유 입력이 필요합니다.</div>
+      </div>
+    </div>
+
+    <!-- 9교시 -->
+    <div class="card">
+      <div class="cardTitle">9교시</div>
+      <label for="p9">9교시 자습 장소</label>
+      <select id="p9" required>
+        <option value="">선택하세요</option>
+        <option>교실</option>
+        <option>아고라(교무실 옆)</option>
+        <option>아고라(3,4반 사이)</option>
+        <option>모둠학습실</option>
+        <option>시청각실</option>
+        <option>한우리관(강당)</option>
+        <option>어학실</option>
+        <option>과학실</option>
+        <option>무한상상실</option>
+        <option>강의실1</option>
+        <option>지성의 계단</option>
+        <option>외출</option>
+        <option>외박</option>
+        <option>기타</option>
+      </select>
+      <div id="reasonWrap9" class="reasonWrap">
+        <label for="r9">9교시 사유</label>
+        <input id="r9" placeholder="예: 방과후, 2층 교무실(상담)" />
+        <div class="hint">해당 장소 선택 시 사유 입력이 필요합니다.</div>
+      </div>
+    </div>
+
+    <!-- 10교시 -->
+    <div class="card">
+      <div class="cardTitle">10교시</div>
+      <label for="p10">10교시 자습 장소</label>
+      <select id="p10" required>
+        <option value="">선택하세요</option>
+        <option>교실</option>
+        <option>아고라(교무실 옆)</option>
+        <option>아고라(3,4반 사이)</option>
+        <option>모둠학습실</option>
+        <option>시청각실</option>
+        <option>한우리관(강당)</option>
+        <option>어학실</option>
+        <option>과학실</option>
+        <option>무한상상실</option>
+        <option>강의실1</option>
+        <option>지성의 계단</option>
+        <option>외출</option>
+        <option>외박</option>
+        <option>기타</option>
+      </select>
+      <div id="reasonWrap10" class="reasonWrap">
+        <label for="r10">10교시 사유</label>
+        <input id="r10" placeholder="예: 방과후, 2층 교무실(상담)" />
+        <div class="hint">해당 장소 선택 시 사유 입력이 필요합니다.</div>
+      </div>
+    </div>
+
+    <!-- 11교시 -->
+    <div class="card">
+      <div class="cardTitle">11교시</div>
+      <label for="p11">11교시 자습 장소</label>
+      <select id="p11" required>
+        <option value="">선택하세요</option>
+        <option>교실</option>
+        <option>아고라(교무실 옆)</option>
+        <option>아고라(3,4반 사이)</option>
+        <option>모둠학습실</option>
+        <option>시청각실</option>
+        <option>한우리관(강당)</option>
+        <option>어학실</option>
+        <option>과학실</option>
+        <option>무한상상실</option>
+        <option>강의실1</option>
+        <option>지성의 계단</option>
+        <option>외출</option>
+        <option>외박</option>
+        <option>기타</option>
+      </select>
+      <div id="reasonWrap11" class="reasonWrap">
+        <label for="r11">11교시 사유</label>
+        <input id="r11" placeholder="예: 방과후, 2층 교무실(상담)" />
+        <div class="hint">해당 장소 선택 시 사유 입력이 필요합니다.</div>
+      </div>
+    </div>
 
     <button id="submitBtn" type="submit">제출</button>
     <div id="status" class="status"></div>
   </form>
 
   <script>
-    // 여기에 Apps Script 웹앱 URL(/exec)을 넣으세요.
+    // /exec 로 끝나는 Apps Script 웹앱 URL을 넣으세요.
     const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbyPVnQqn9kavbz7DFLjl0C9LFdVQ1OzOHq0VgjZ5cEwyCCP7CY6OI6bPE7lxj91HgsG/exec";
 
-    const PLACES = [
-      "교실",
-      "아고라(교무실 옆)",
-      "아고라(3,4반 사이)",
-      "모둠학습실",
-      "시청각실",
-      "한우리관(강당)",
-      "어학실",
-      "과학실",
-      "무한상상실",
-      "강의실1",
-      "지성의 계단",
-      "외출",
-      "외박",
-      "기타"
-    ];
-
     const NEED_REASON = new Set([
-      "모둠학습실",
-      "시청각실",
-      "한우리관(강당)",
-      "어학실",
-      "과학실",
-      "무한상상실",
-      "강의실1",
-      "지성의 계단",
-      "기타"
+      "모둠학습실","시청각실","한우리관(강당)","어학실","과학실",
+      "무한상상실","강의실1","지성의 계단","기타"
     ]);
 
-    const PERIODS = [8, 9, 10, 11];
+    const PERIODS = [8,9,10,11];
 
-    const periodsEl = document.getElementById("periods");
     const form = document.getElementById("form");
     const statusEl = document.getElementById("status");
     const submitBtn = document.getElementById("submitBtn");
@@ -87,51 +172,8 @@
 
     function setStatus(msg, ok) {
       statusEl.textContent = msg;
-      statusEl.classList.remove("ok", "err");
-      statusEl.classList.add(ok ? "ok" : "err");
+      statusEl.className = "status " + (ok ? "ok" : "err");
       statusEl.style.display = "block";
-    }
-
-    function buildPlaceSelect(period) {
-      const select = document.createElement("select");
-      select.id = `p${period}`;
-      select.required = true;
-
-      const opt0 = document.createElement("option");
-      opt0.value = "";
-      opt0.textContent = "선택하세요";
-      select.appendChild(opt0);
-
-      for (const place of PLACES) {
-        const opt = document.createElement("option");
-        opt.value = place;
-        opt.textContent = place;
-        select.appendChild(opt);
-      }
-      return select;
-    }
-
-    function buildReasonWrap(period) {
-      const wrap = document.createElement("div");
-      wrap.id = `reasonWrap${period}`;
-      wrap.className = "reasonWrap";
-
-      const label = document.createElement("label");
-      label.setAttribute("for", `r${period}`);
-      label.textContent = `${period}교시 사유`;
-
-      const input = document.createElement("input");
-      input.id = `r${period}`;
-      input.placeholder = "예: 방과후, 2층 교무실(상담)";
-
-      const hint = document.createElement("div");
-      hint.className = "hint";
-      hint.textContent = "해당 장소 선택 시 사유 입력이 필요합니다.";
-
-      wrap.appendChild(label);
-      wrap.appendChild(input);
-      wrap.appendChild(hint);
-      return wrap;
     }
 
     function toggleReason(period) {
@@ -145,31 +187,11 @@
       if (!need) input.value = "";
     }
 
-    // 교시별 UI 생성
-    for (const period of PERIODS) {
-      const card = document.createElement("div");
-      card.className = "card";
-
-      const title = document.createElement("div");
-      title.className = "cardTitle";
-      title.textContent = `${period}교시`;
-
-      const placeLabel = document.createElement("label");
-      placeLabel.setAttribute("for", `p${period}`);
-      placeLabel.textContent = `${period}교시 자습 장소`;
-
-      const placeSelect = buildPlaceSelect(period);
-      placeSelect.addEventListener("change", () => toggleReason(period));
-
-      const reasonWrap = buildReasonWrap(period);
-
-      card.appendChild(title);
-      card.appendChild(placeLabel);
-      card.appendChild(placeSelect);
-      card.appendChild(reasonWrap);
-
-      periodsEl.appendChild(card);
-    }
+    // change 이벤트 연결 + 초기 상태
+    PERIODS.forEach(p => {
+      document.getElementById(`p${p}`).addEventListener("change", () => toggleReason(p));
+      toggleReason(p);
+    });
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -185,21 +207,20 @@
 
       const payload = { studentId, name };
 
-      for (const period of PERIODS) {
-        const place = norm(document.getElementById(`p${period}`).value);
-        const reason = norm(document.getElementById(`r${period}`).value);
+      for (const p of PERIODS) {
+        const place = norm(document.getElementById(`p${p}`).value);
+        const reason = norm(document.getElementById(`r${p}`).value);
 
         if (!place) {
-          setStatus(`${period}교시 장소를 선택하세요.`, false);
+          setStatus(`${p}교시 장소를 선택하세요.`, false);
           return;
         }
         if (NEED_REASON.has(place) && !reason) {
-          setStatus(`${period}교시: 해당 장소 선택 시 사유를 입력해야 합니다.`, false);
+          setStatus(`${p}교시: 사유를 입력해야 합니다.`, false);
           return;
         }
-
-        payload[`p${period}`] = place;
-        payload[`r${period}`] = reason; // 없으면 빈 문자열
+        payload[`p${p}`] = place;
+        payload[`r${p}`] = reason;
       }
 
       submitBtn.disabled = true;
@@ -213,16 +234,13 @@
 
         setStatus("제출 완료", true);
         form.reset();
-        for (const period of PERIODS) toggleReason(period);
+        PERIODS.forEach(toggleReason);
       } catch (err) {
         setStatus("전송 실패: 네트워크 상태를 확인하세요.", false);
       } finally {
         submitBtn.disabled = false;
       }
     });
-
-    // 초기 상태
-    for (const period of PERIODS) toggleReason(period);
   </script>
 </body>
 </html>
