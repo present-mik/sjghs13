@@ -3,128 +3,233 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>자습 출석 입력</title>
+  <title>자습 장소 입력</title>
   <style>
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;max-width:720px;margin:24px auto;padding:0 16px;}
-    label{display:block;margin:14px 0 6px;font-weight:600;}
-    input,select,button{width:100%;padding:10px 12px;font-size:16px;}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-    .status{margin-top:14px;padding:10px 12px;border-radius:8px;display:none;}
-    .ok{background:#eef8ee;display:block;}
-    .err{background:#fdeeee;display:block;}
-    button{margin-top:18px;cursor:pointer;}
-    button[disabled]{opacity:.6;cursor:not-allowed;}
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; max-width: 760px; margin: 24px auto; padding: 0 16px; }
+    h1 { font-size: 20px; margin: 0 0 16px; }
+    label { display:block; margin: 14px 0 6px; font-weight: 700; }
+    input, select, button { width: 100%; padding: 10px 12px; font-size: 16px; box-sizing: border-box; }
+    .row { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .hint { color:#666; font-size: 13px; margin-top: 6px; }
+    .reasonWrap { display:none; margin-top: 10px; }
+    .status { margin-top: 14px; padding: 10px 12px; border-radius: 8px; display:none; }
+    .ok { background:#eef8ee; }
+    .err { background:#fdeeee; }
+    button { margin-top: 18px; cursor: pointer; }
+    button[disabled] { opacity: 0.6; cursor: not-allowed; }
+    .card { border: 1px solid #e6e6e6; border-radius: 12px; padding: 14px; margin-top: 14px; }
+    .cardTitle { font-weight: 800; margin: 0 0 10px; }
   </style>
 </head>
+
 <body>
-  <h1>자습 출석 입력</h1>
+  <h1>자습 장소 입력</h1>
 
   <form id="form">
     <div class="row">
       <div>
-        <label>학번</label>
-        <input id="studentId" placeholder="예: 2101" required />
+        <label for="studentId">학번</label>
+        <input id="studentId" name="studentId" inputmode="numeric" placeholder="예: 2101" required />
       </div>
       <div>
-        <label>이름</label>
-        <input id="name" placeholder="이름" required />
+        <label for="name">이름</label>
+        <input id="name" name="name" placeholder="이름" required />
       </div>
     </div>
 
-    <label>8교시 자습 장소</label>
-    <select id="p8" required>
-      <option value="">선택하세요</option>
-      <option>교실</option>
-      <option>아고라(교무실 옆)</option>
-      <option>아고라(3~4반 사이)</option>
-      <option>아고라(강의실 1옆)</option>
-      <option>시청각실</option>
-      <option>한우리관(강당)</option>
-      <option>어학실</option>
-      <option>지성의 계단</option>
-      <option>과학실</option>
-      <option>무한상상실</option>
-      <option>외출</option>
-      <option>외박</option>
-      <option>기타</option>
-    </select>
+    <div id="periods"></div>
 
-    <label>9교시 자습 장소</label>
-    <select id="p9" required><!-- 동일 옵션 --></select>
-
-    <label>10교시 자습 장소</label>
-    <select id="p10" required><!-- 동일 옵션 --></select>
-
-    <label>11교시 자습 장소</label>
-    <select id="p11" required><!-- 동일 옵션 --></select>
-
-    <button id="btn" type="submit">제출</button>
+    <button id="submitBtn" type="submit">제출</button>
     <div id="status" class="status"></div>
   </form>
 
   <script>
-    const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbxp_NGgSOg7zw7_Mc1R-H32lZiBtFn2wo0Z6nmDfHy1rGJ7gSGQrqI4MhNNVXy3I-DS/exec";
+    // TODO: 여기에 Apps Script 웹앱 URL(/exec)을 넣으세요.
+    const ENDPOINT_URL = "PASTE_YOUR_APPS_SCRIPT_WEBAPP_URL_HERE";
 
-    // p8 옵션을 복제해서 p9~p11에 넣기
-    const p8 = document.getElementById("p8");
-    ["p9","p10","p11"].forEach(id => {
-      const sel = document.getElementById(id);
-      sel.innerHTML = p8.innerHTML;
-      // value 유지되도록 option 목록 복제
-      sel.querySelectorAll("option").forEach((opt,i)=>{
-        opt.value = p8.querySelectorAll("option")[i].value || p8.querySelectorAll("option")[i].textContent;
-        opt.textContent = p8.querySelectorAll("option")[i].textContent;
-      });
-      // 첫 option은 value=""
-      sel.querySelector("option").value = "";
-    });
+    const PLACES = [
+      "교실",
+      "아고라(교무실 옆)",
+      "아고라(3,4반 사이)",
+      "모둠학습실",
+      "시청각실",
+      "한우리관(강당)",
+      "어학실",
+      "과학실",
+      "무한상상실",
+      "강의실1",
+      "지성의 계단",
+      "외출",
+      "외박",
+      "기타"
+    ];
 
+    const NEED_REASON = new Set([
+      "모둠학습실",
+      "시청각실",
+      "한우리관(강당)",
+      "어학실",
+      "과학실",
+      "무한상상실",
+      "강의실1",
+      "지성의 계단",
+      "기타"
+    ]);
+
+    const PERIODS = [8, 9, 10, 11];
+
+    const periodsEl = document.getElementById("periods");
     const form = document.getElementById("form");
-    const btn = document.getElementById("btn");
-    const status = document.getElementById("status");
+    const statusEl = document.getElementById("status");
+    const submitBtn = document.getElementById("submitBtn");
 
-    const norm = s => (s||"").replace(/\s+/g," ").trim();
+    const norm = (s) => (s || "").replace(/\s+/g, " ").trim();
 
-    function setStatus(msg, ok){
-      status.textContent = msg;
-      status.className = "status " + (ok ? "ok" : "err");
+    function setStatus(msg, ok) {
+      statusEl.textContent = msg;
+      statusEl.classList.remove("ok", "err");
+      statusEl.classList.add(ok ? "ok" : "err");
+      statusEl.style.display = "block";
+    }
+
+    function buildPlaceSelect(period) {
+      const select = document.createElement("select");
+      select.id = `p${period}`;
+      select.name = `p${period}`;
+      select.required = true;
+
+      const opt0 = document.createElement("option");
+      opt0.value = "";
+      opt0.textContent = "선택하세요";
+      select.appendChild(opt0);
+
+      for (const place of PLACES) {
+        const opt = document.createElement("option");
+        opt.value = place;
+        opt.textContent = place;
+        select.appendChild(opt);
+      }
+      return select;
+    }
+
+    function buildReasonWrap(period) {
+      const wrap = document.createElement("div");
+      wrap.id = `reasonWrap${period}`;
+      wrap.className = "reasonWrap";
+
+      const label = document.createElement("label");
+      label.setAttribute("for", `r${period}`);
+      label.textContent = `${period}교시 사유`;
+
+      const input = document.createElement("input");
+      input.id = `r${period}`;
+      input.name = `r${period}`;
+      input.placeholder = "예: 방과후, 2층 교무실(상담)";
+
+      const hint = document.createElement("div");
+      hint.className = "hint";
+      hint.textContent = "해당 장소 선택 시 사유 입력이 필요합니다.";
+
+      wrap.appendChild(label);
+      wrap.appendChild(input);
+      wrap.appendChild(hint);
+      return wrap;
+    }
+
+    function toggleReason(period) {
+      const place = norm(document.getElementById(`p${period}`).value);
+      const wrap = document.getElementById(`reasonWrap${period}`);
+      const input = document.getElementById(`r${period}`);
+
+      const need = NEED_REASON.has(place);
+      wrap.style.display = need ? "block" : "none";
+      input.required = need;
+      if (!need) input.value = "";
+    }
+
+    // 교시별 입력 UI 생성
+    for (const period of PERIODS) {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const title = document.createElement("div");
+      title.className = "cardTitle";
+      title.textContent = `${period}교시`;
+
+      const placeLabel = document.createElement("label");
+      placeLabel.setAttribute("for", `p${period}`);
+      placeLabel.textContent = `${period}교시 자습 장소`;
+
+      const placeSelect = buildPlaceSelect(period);
+      placeSelect.addEventListener("change", () => toggleReason(period));
+
+      const reasonWrap = buildReasonWrap(period);
+
+      card.appendChild(title);
+      card.appendChild(placeLabel);
+      card.appendChild(placeSelect);
+      card.appendChild(reasonWrap);
+
+      periodsEl.appendChild(card);
     }
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      statusEl.style.display = "none";
 
-      const payload = {
-        studentId: norm(document.getElementById("studentId").value),
-        name: norm(document.getElementById("name").value),
-        p8: norm(document.getElementById("p8").value),
-        p9: norm(document.getElementById("p9").value),
-        p10: norm(document.getElementById("p10").value),
-        p11: norm(document.getElementById("p11").value),
-      };
+      const studentId = norm(document.getElementById("studentId").value);
+      const name = norm(document.getElementById("name").value);
 
-      if (!payload.studentId || !payload.name || !payload.p8 || !payload.p9 || !payload.p10 || !payload.p11) {
-        setStatus("학번/이름과 8~11교시 장소를 모두 입력하세요.", false);
+      if (!studentId || !name) {
+        setStatus("학번과 이름을 입력하세요.", false);
         return;
       }
 
-      btn.disabled = true;
+      // payload 구성
+      const payload = { studentId, name, userAgent: navigator.userAgent, page: location.href };
+
+      // 검증 + 데이터 채우기
+      for (const period of PERIODS) {
+        const place = norm(document.getElementById(`p${period}`).value);
+        const reason = norm(document.getElementById(`r${period}`).value);
+
+        if (!place) {
+          setStatus(`${period}교시 장소를 선택하세요.`, false);
+          return;
+        }
+        if (NEED_REASON.has(place) && !reason) {
+          setStatus(`${period}교시: 해당 장소 선택 시 사유를 입력해야 합니다.`, false);
+          return;
+        }
+
+        payload[`p${period}`] = place;
+        payload[`r${period}`] = reason; // 필요 없으면 빈 문자열
+      }
+
+      submitBtn.disabled = true;
+
       try {
-        // CORS 단순화를 위해 no-cors 사용(응답은 읽을 수 없음)
-        await fetch(https://script.google.com/macros/s/AKfycbxp_NGgSOg7zw7_Mc1R-H32lZiBtFn2wo0Z6nmDfHy1rGJ7gSGQrqI4MhNNVXy3I-DS/exec, {
+        // Apps Script CORS 단순화를 위해 no-cors
+        await fetch(ENDPOINT_URL, {
           method: "POST",
           mode: "no-cors",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(payload),
         });
 
-        setStatus("제출 완료(시트 반영까지 몇 초 걸릴 수 있음)", true);
+        setStatus("제출 완료", true);
         form.reset();
+        // 사유칸 숨김 초기화
+        for (const period of PERIODS) toggleReason(period);
       } catch (err) {
-        setStatus("전송 실패: 네트워크를 확인하세요.", false);
+        setStatus("전송 실패: 네트워크 상태를 확인하세요.", false);
       } finally {
-        btn.disabled = false;
+        submitBtn.disabled = false;
       }
     });
+
+    // 초기 상태 사유칸 숨김
+    for (const period of PERIODS) toggleReason(period);
   </script>
 </body>
 </html>
