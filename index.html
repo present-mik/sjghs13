@@ -67,11 +67,13 @@
     <div class="row">
       <div>
         <label for="studentId">학번</label>
-        <input id="studentId" name="studentId" inputmode="numeric" placeholder="예: 2101" required />
+        <!-- 입력 단계 제한 유지 -->
+        <input id="studentId" name="studentId" inputmode="numeric" placeholder="예: 2101" required maxlength="4" />
       </div>
       <div>
         <label for="name">이름</label>
-        <input id="name" name="name" placeholder="이름" required />
+        <!-- 입력 단계 제한 유지 -->
+        <input id="name" name="name" placeholder="이름" required maxlength="3" />
       </div>
     </div>
 
@@ -199,7 +201,7 @@
   </form>
 
   <script>
-    // ⭐ Apps Script Web App URL 입력 (/exec)
+    // ⭐ Apps Script Web App URL(/exec) 입력
     const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbwGtt4bgd0xwgl_vmzxodG70GbM6Y4OQaadpU_3w8FIGHGU8tRpSTyU0TFPuPmpLJ-q/exec";
 
     // 사유 입력이 필요한 장소들
@@ -230,6 +232,7 @@
       if (!need) reasonEl.value = "";
     }
 
+    // 초기화 + change 이벤트 연결
     for (const p of periods) {
       const placeEl = document.getElementById(`place${p}`);
       placeEl.addEventListener("change", () => toggleReasonForPeriod(p));
@@ -239,14 +242,15 @@
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      // 제출 시점에만 검증: 학번=숫자4자리, 이름=공백제거 후 3글자
+      // ===== 제출 차단(필수): 학번 숫자 4자리 =====
       const rawId = document.getElementById("studentId").value;
-      const studentId = rawId.replace(/\D+/g, "").trim();
+      const studentId = rawId.replace(/\D+/g, "").trim(); // 숫자만
       if (!/^\d{4}$/.test(studentId)) {
         alert("학번은 숫자 4자리여야 합니다.");
         return;
       }
 
+      // ===== 제출 차단(필수): 이름 공백 제거 후 3글자 =====
       const rawName = document.getElementById("name").value;
       const name = rawName.replace(/\s+/g, "").trim();
       if (name.length !== 3) {
@@ -269,10 +273,11 @@
           alert(`${p}교시는 해당 장소 선택 시 사유를 입력해야 합니다.`);
           return;
         }
+
         payload[`p${p}`] = NEED_REASON.has(place) ? `${place}(${reason})` : place;
       }
 
-      // ⭐ 초창기판 스타일: form 전송 방식(가장 안정적)
+      // 초창기판 방식: URLSearchParams 전송(가장 안정적)
       const body = new URLSearchParams(payload);
 
       submitBtn.disabled = true;
